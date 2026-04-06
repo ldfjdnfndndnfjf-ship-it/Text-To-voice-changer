@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEXT TO VOICE - Nawab ZADA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="lockerOverlay" class="overlay">
+        <div class="locker-box">
+            <h2>⚠️ TOOL LOCKED ⚠️</h2>
+            <p>Please follow our WhatsApp channel to unlock this VIP tool.</p>
+            <a href="https://whatsapp.com/channel/0029VbB47ttDDmFNztpnZf2m" 
+               target="_blank" 
+               id="followBtn" 
+               class="btn follow">FOLLOW WHATSAPP CHANNEL</a>
+            <p class="small-text">After clicking, the tool will unlock automatically.</p>
+        </div>
+    </div>
+
+    <div class="container" id="mainTool" style="display:none;">
+        <header>
+            <h1>TEXT TO CHANGE VOICE</h1>
+            <p class="dev-name">Developer: <span>Nawab ZADA Hacker</span></p>
+        </header>
+
+        <div class="input-section">
+            <textarea id="textInput" placeholder="Yahan apna text likhen..."></textarea>
+            
+            <div class="options">
+                <label>Voice Type:</label>
+                <select id="voiceSelector">
+                    <option value="men">Male Voice (Deep)</option>
+                    <option value="women">Female Voice (Soft)</option>
+                    <option value="children">Child Voice (High Pitch)</option>
+                    <option value="robot">Robot Voice (Monotone)</option>
+                </select>
+            </div>
+
+            <div class="btn-group">
+                <button onclick="speakText()" class="btn play">Play Voice</button>
+                <button id="downloadBtn" class="btn download">Download Voice</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
