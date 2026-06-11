@@ -31,36 +31,32 @@ function speakText() {
 document.getElementById('downloadBtn').onclick = function() {
     let text = document.getElementById('textInput').value;
     if (!text) {
-        alert("Pehle kuch likhen to sahi, Jani!");
+        alert("Please write your text!");
         return;
     }
 
     alert("Voice Downloading Started...");
 
-    // Nawab ZADA, browser voice ko direct local file nahi banata, 
-    // isliye hum online tts API use kar rahe hain taake exact MP3 generate ho aur gallery me chale.
     let voiceType = document.getElementById('voiceSelector').value;
-    let lang = "en"; // Default language
-    
-    // Voice type ke mutabiq language ya settings fetch karne ka jugaar
-    // (Taake extra functions add na karne paren)
-    let encText = encodeURIComponent(text);
-    let audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${lang}&client=tw-ob&q=${encText}`;
+    let voiceParam = "UK English Female"; // Default voice
 
-    // Downloading logic via fetching actual audio data
-    fetch(audioUrl)
-        .then(response => response.blob())
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'NawabZADA_Voice.mp3';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        })
-        .catch(() => {
-            alert("Download me thoda masla hua, jani!");
-        });
+    // Voice type ke mutabiq voice select karna (Bina extra function ke)
+    if (voiceType === "men") { voiceParam = "UK English Male"; }
+    else if (voiceType === "women") { voiceParam = "UK English Female"; }
+    else if (voiceType === "children") { voiceParam = "US English Female"; }
+    else if (voiceType === "robot") { voiceParam = "UK English Male"; }
+
+    let encText = encodeURIComponent(text);
+    // CORS-free direct audio link jo browser block nahi karega
+    let audioUrl = `https://code.responsivevoice.org/develop/getvoice.php?t=${encText}&tl=${encodeURIComponent(voiceParam)}&sv=&vn=&pitch=0.5&rate=0.5&vol=1&key=39b3G59t`;
+
+    // Direct hidden link download trick (CORS error bypass karne ke liye best hai)
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = audioUrl;
+    a.download = 'NawabZADA_Voice.mp3';
+    a.target = '_blank'; // Mobile aur desktop dono par secure download trigger karega
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 };
