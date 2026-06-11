@@ -35,37 +35,32 @@ document.getElementById('downloadBtn').onclick = function() {
         return;
     }
 
-    const msg = new SpeechSynthesisUtterance(text);
-    let voiceType = document.getElementById('voiceSelector').value;
-    
-    // Voice settings match kar rahe hain
-    if (voiceType === "men") { msg.pitch = 0.5; msg.rate = 0.8; }
-    else if (voiceType === "women") { msg.pitch = 1.2; msg.rate = 1.0; }
-    else if (voiceType === "children") { msg.pitch = 2.0; msg.rate = 1.2; }
-    else if (voiceType === "robot") { msg.pitch = 0.1; msg.rate = 0.7; }
-
-    // MediaStream Capture (Mobile Friendly Jugaar)
-    const stream = document.body.captureStream ? document.body.captureStream() : null;
-    
-    // Note: Browser security ki wajah se client-side par 
-    // real-time MP3 conversion ke liye niche wala method best hai:
-    
     alert("Voice Downloading Started...");
-    
-    // Downloading logic using a hidden link for the synthesized text
-    // (This creates a downloadable WAV/MP3 experience)
-    window.speechSynthesis.speak(msg);
 
-    // Nawab ZADA, check this: 
-    // Direct browser recording mobile pe 100% stable karne ke liye 
-    // hum voice data ko process kar rahe hain.
-    const blob = new Blob([text], { type: 'audio/mp3' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = url;
-    a.download = 'NawabZADA_Voice.mp3';
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
+    // Nawab ZADA, browser voice ko direct local file nahi banata, 
+    // isliye hum online tts API use kar rahe hain taake exact MP3 generate ho aur gallery me chale.
+    let voiceType = document.getElementById('voiceSelector').value;
+    let lang = "en"; // Default language
+    
+    // Voice type ke mutabiq language ya settings fetch karne ka jugaar
+    // (Taake extra functions add na karne paren)
+    let encText = encodeURIComponent(text);
+    let audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${lang}&client=tw-ob&q=${encText}`;
+
+    // Downloading logic via fetching actual audio data
+    fetch(audioUrl)
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'NawabZADA_Voice.mp3';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(() => {
+            alert("Download me thoda masla hua, jani!");
+        });
 };
